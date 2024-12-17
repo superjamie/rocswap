@@ -24,13 +24,17 @@ llama-swap - OpenAI-compatible server to serve models and swap/proxy inference s
 
 ## Instructions
 
-Build container:
+You need Linux with the `amdgpu` driver ROCm interface enabled. Debian Bookworm Backports comes with this already done. For other distros you might need to use the `amdgpu-install` script from the AMD website.
+
+Look up your GPU in the [LLVM amdgpu targets](https://llvm.org/docs/AMDGPUUsage.html#processors) and replace my `gfx1010` in the `Containerfile` with your GPU's architecture name.
+
+Build the container:
 
 ```
 podman build . -t rocswap
 ```
 
-Deploy container:
+Deploy the container:
 
 ```
 podman run -dit -p 8080:8080 --name rocswap \
@@ -41,6 +45,12 @@ podman run -dit -p 8080:8080 --name rocswap \
   --user 1000:1000 \
   rocswap
 ```
+
+If you have models which are smaller than your VRAM (minus about 1 GiB for other allocations) then you can keep `-ngl 99` in the server config to load all layers on the GPU.
+
+However, if you are running a model larger than your GPU's VRAM, then use the llama-swap llama.cpp log output (<http://localhost:8080/logs>) and the `radeontop` commandline program to load as many layers as you can with the llama.cpp `-ngl` option without overflowing VRAM. The other layers will run on the CPU.
+
+For example, I have a Radeon RX 5600 XT 6Gb. I can load all of small models like Gemma-2-2B-It or Phi-3.5-mini-instruct (4B) on the GPU. To load a larger model like Llama-3.1-8B-Q6KL, I can only load 24 layers of the model's 33 layers so I use `-ngl 24`.
 
 ## License
 
