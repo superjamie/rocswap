@@ -1,0 +1,10 @@
+# see also: https://github.com/mostlygeek/llama-swap/blob/main/config.example.yaml
+
+healthCheckTimeout: 60
+models:
+  "gemma-2-2b-it":
+    cmd: >
+      /app/llama-server --port 10000
+      --model /models/bartowski/gemma-2-2b-it-GGUF/gemma-2-2b-it-Q8_0.gguf
+      -ngl 99
+    proxy: http://127.0.0.1:10000
