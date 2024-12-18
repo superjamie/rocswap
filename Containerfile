@@ -12,8 +12,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     -DAMDGPU_TARGETS="gfx1010" -DCMAKE_HIP_ARCHITECTURES="gfx1010" \
     -DCMAKE_BUILD_TYPE=Release && \
     make -j $(nproc) -C /app llama-server && \
-    wget https://github.com/mostlygeek/llama-swap/releases/download/v76/llama-swap_76_linux_amd64.tar.gz && \
-    tar xf llama-swap_76_linux_amd64.tar.gz
+    wget https://github.com/mostlygeek/llama-swap/releases/download/v78/llama-swap_78_linux_amd64.tar.gz && \
+    tar xf llama-swap_78_linux_amd64.tar.gz
 
 FROM docker.io/library/debian:trixie-slim AS runtime
 
