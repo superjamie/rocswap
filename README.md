@@ -22,9 +22,15 @@ llama-swap - OpenAI-compatible server to serve models and swap/proxy inference s
 
 - https://github.com/mostlygeek/llama-swap
 
-## Instructions
+## Requirements
 
-You need Linux with the `amdgpu` driver ROCm interface enabled. Debian Bookworm Backports comes with this already done. For other distros you might need to use the `amdgpu-install` script from the AMD website.
+Linux with the `amdgpu` driver ROCm interface enabled. Debian Bookworm Backports and Debian Trixie/Sid come with this already done. Maybe Ubuntu 24.04 (let me know?). For other distros you might need to use the `amdgpu-install` script from the AMD website.
+
+If using Debian, make sure your GPU is on the [supported GPU list](https://salsa.debian.org/rocm-team/community/team-project/-/wikis/Supported-GPU-list) in Trixie/Sid. The Bookworm Backports kernel has the same support level as Trixie.
+
+Add your user to the `video` and `render` groups on your system: `usermod -aG video,render "$USER"`. Log out and log in again. Confirm with the `groups` command.
+
+## Instructions
 
 Look up your GPU in the [LLVM amdgpu targets](https://llvm.org/docs/AMDGPUUsage.html#processors) and replace my `gfx1010` in the `Containerfile` with your GPU's architecture name.
 
