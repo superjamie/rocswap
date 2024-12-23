@@ -1,20 +1,22 @@
-# rocswap - llama.cpp + ROCm + llama-swap
+# rocswap = llama.cpp + ROCm + llama-swap
 
-A Linux container which builds llama.cpp with ROCm support, and uses llama-swap to serve models.
+Allows you to run llama.cpp with ROCm acceleration on most Radeon RX Vega/5000/6000/7000, even those not on AMD's official ROCm supported GPU list.
 
 ## Contents
 
+This is a Linux container which builds llama.cpp with ROCm support and uses llama-swap to serve models.
+
 I just put this together from other people's work listed below.
 
-Comment from u/Slavik81 that Debian Bookworm Backports kernel contains ROCm kernel interface, and Debian Trixie contains the userspace:
+Reddit comment that Debian Bookworm Backports kernel contains the ROCm kernel interface, and Debian Trixie contains the userspace:
 
 - https://www.reddit.com/r/debian/comments/1hcve14/comment/m1s3xmz/
 
-Instructions on Debian AI list to compile llama.cpp with ROCm:
+Instructions on Debian-AI list to compile llama.cpp with ROCm:
 
 - https://lists.debian.org/debian-ai/2024/07/msg00002.html
 
-llama.cpp - efficient CPU and GPU inference server:
+llama.cpp - efficient CPU and GPU LLM inference server:
 
 - https://github.com/ggerganov/llama.cpp
 
@@ -24,9 +26,9 @@ llama-swap - OpenAI-compatible server to serve models and swap/proxy inference s
 
 ## Requirements
 
-Linux with the `amdgpu` driver ROCm interface enabled. Debian Bookworm Backports and Debian Trixie/Sid come with this already done. Maybe Ubuntu 24.04 (let me know?). For other distros you might need to use the `amdgpu-install` script from the AMD website.
+Linux with the `amdgpu` driver ROCm interface enabled. Debian Bookworm Backports, Debian Trixie/Sid, and Ubuntu 24.04 with this already done. For other distros you might need to use the `amdgpu-install` script [from the AMD website](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/install-overview.html).
 
-If using Debian, make sure your GPU is on the [supported GPU list](https://salsa.debian.org/rocm-team/community/team-project/-/wikis/Supported-GPU-list) in Trixie/Sid. The Bookworm Backports kernel has the same support level as Trixie.
+If using Debian or Ubuntu, make sure your GPU is on the [Debian ROCm supported GPU list](https://salsa.debian.org/rocm-team/community/team-project/-/wikis/Supported-GPU-list) in Trixie/Sid. The Bookworm Backports kernel has the same support level as Trixie.
 
 Add your user to the `video` and `render` groups on your system: `usermod -aG video,render "$USER"`. Log out and log in again. Confirm with the `groups` command.
 
@@ -54,9 +56,9 @@ podman run -dit -p 8080:8080 --name rocswap \
 
 If you have models which are smaller than your VRAM (minus about 1 GiB for other allocations) then you can keep `-ngl 99` in the server config to load all layers on the GPU.
 
-However, if you are running a model larger than your GPU's VRAM, then use the llama-swap llama.cpp log output (<http://localhost:8080/logs>) and the `radeontop` commandline program to load as many layers as you can with the llama.cpp `-ngl` option without overflowing VRAM. The other layers will run on the CPU.
+If you are running a model larger than your GPU's VRAM, then use the llama-swap llama.cpp log output (<http://localhost:8080/logs>) and the `radeontop` commandline program to load as many layers as you can with the llama.cpp `-ngl` option without overflowing VRAM. The other layers will run on the CPU.
 
-For example, I have a Radeon RX 5600 XT 6Gb. I can load all of small models like Gemma-2-2B-It or Phi-3.5-mini-instruct (4B) on the GPU. To load a larger model like Llama-3.1-8B-Q6KL, I can only load 24 layers of the model's 33 layers so I use `-ngl 24`.
+For example, I have a Radeon RX 5600 XT 6Gb. I can load all of small models like Gemma-2-2B-it or Phi-3.5-mini-instruct (4B) on the GPU. To load a larger model like Llama-3.1-8B-Q6KL, I can only load 24 layers of the model's 33 layers so I use `-ngl 24`.
 
 ## License
 
