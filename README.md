@@ -26,15 +26,15 @@ llama-swap - OpenAI-compatible server to serve models and swap/proxy inference s
 
 ## Requirements
 
-Linux with the `amdgpu` driver ROCm interface enabled. Debian Bookworm Backports, Debian Trixie/Sid, and Ubuntu 24.04 with this already done. For other distros you might need to use the `amdgpu-install` script [from the AMD website](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/install-overview.html).
+Linux with the `amdgpu` driver ROCm interface enabled. Distros with this already included by default are: Debian Bookworm Backports, Debian Trixie/Sid, and Ubuntu 24.04. For other distros you might need to use the `amdgpu-install` script [from the AMD website](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/install-overview.html).
 
-If using Debian or Ubuntu, make sure your GPU is on the [Debian ROCm supported GPU list](https://salsa.debian.org/rocm-team/community/team-project/-/wikis/Supported-GPU-list) in Trixie/Sid. The Bookworm Backports kernel has the same support level as Trixie.
+Make sure your GPU is on the [Debian ROCm supported GPU list](https://salsa.debian.org/rocm-team/community/team-project/-/wikis/Supported-GPU-list) in Trixie/Sid. The Bookworm Backports kernel has the same support level as Trixie.
 
 Add your user to the `video` and `render` groups on your system: `usermod -aG video,render "$USER"`. Log out and log in again. Confirm with the `groups` command.
 
 ## Instructions
 
-Look up your GPU in the [LLVM amdgpu targets](https://llvm.org/docs/AMDGPUUsage.html#processors) and replace my `gfx1010` in the `Containerfile` with your GPU's architecture name.
+Look up your GPU in the [LLVM amdgpu targets](https://llvm.org/docs/AMDGPUUsage.html#processors), or look at your GPU's code name in `rocminfo`, and replace my `gfx1010` in the `Containerfile` with your GPU's architecture name.
 
 Build the container:
 
