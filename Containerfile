@@ -12,8 +12,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     -DGGML_NATIVE=OFF -DBUILD_SHARED_LIBS=OFF \
     -DCMAKE_BUILD_TYPE=Release && \
     make -j $(nproc) -C /app llama-server && \
-    wget https://github.com/mostlygeek/llama-swap/releases/download/v80/llama-swap_80_linux_amd64.tar.gz && \
-    tar xf llama-swap_80_linux_amd64.tar.gz
+    wget https://github.com/mostlygeek/llama-swap/releases/download/v83/llama-swap_83_linux_amd64.tar.gz && \
+    tar xf llama-swap_83_linux_amd64.tar.gz
 
 FROM docker.io/library/debian:trixie-slim AS runtime
 
