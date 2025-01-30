@@ -2,6 +2,8 @@
 
 Allows you to run llama.cpp with ROCm acceleration on most Radeon RX Vega/5000/6000/7000, even those not on AMD's official ROCm supported GPU list.
 
+**Update Jan 2025: If you have RDNA (RX 5000) or newer, don't use this, use Vulkan. It will be the same speed or faster than ROCm.**
+
 ## Contents
 
 This is a Linux container which builds llama.cpp with ROCm support and uses llama-swap to serve models.
